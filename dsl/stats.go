@@ -10,5 +10,6 @@ type Stats struct {
 }
 
 func (s Stats) String() string {
-	return fmt.Sprintf("n=%d [%.4f, <%.4f>, %.4f]", s.Count, s.Min, s.Mean, s.Max)
+	count := fmt.Sprintf("n=%d", s.Count)
+	return fmt.Sprintf("%8s [%.4f, <%.4f>, %.4f]", count, s.Min, s.Mean, s.Max)
 }

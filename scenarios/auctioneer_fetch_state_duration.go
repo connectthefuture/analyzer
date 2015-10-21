@@ -19,12 +19,12 @@ func GenerateAuctioneerFetchStateDurationCommand() say.Command {
 		Description: "10/19/2015: auctioneer showing spiky FetchState durations",
 		FlagSet:     &flag.FlagSet{},
 		Run: func(args []string) {
-			generateAuctioneerFetchStateDuration()
+			analyzeAuctioneerFetchStateDuration()
 		},
 	}
 }
 
-func generateAuctioneerFetchStateDuration() {
+func analyzeAuctioneerFetchStateDuration() {
 	data, err := ioutil.ReadFile(config.DataDir("auctioneer-fetch-state-duration", "auctioneer-fetch-state-duration.logs"))
 	say.ExitIfError("couldn't read log file", err)
 

@@ -8,6 +8,7 @@ func GenerateCommandGroups() []say.CommandGroup {
 			Name:        "diego",
 			Description: "Diego analysis commands",
 			Commands: []say.Command{
+				GenerateGardenDTCommand(),
 				GenerateAuctioneerFetchStateDurationCommand(),
 			},
 		},

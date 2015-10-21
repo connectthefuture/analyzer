@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/onsi/say"
+
 	"code.google.com/p/plotinum/plot"
 	"code.google.com/p/plotinum/vg"
 	"code.google.com/p/plotinum/vg/vgeps"
@@ -151,5 +153,7 @@ func (b *Board) Save(width, height float64, file string) (err error) {
 	if _, err = c.WriteTo(f); err != nil {
 		return err
 	}
+
+	say.Println(0, say.Yellow("Saved %s", file))
 	return f.Close()
 }

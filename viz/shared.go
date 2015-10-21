@@ -60,6 +60,13 @@ var OrderedColors = []color.RGBA{
 	{0, 125, 255, 255},
 }
 
+func OrderedColor(i int) color.RGBA {
+	return OrderedColors[i%len(OrderedColors)]
+}
+
+var Dot = []vg.Length{vg.Points(1), vg.Points(4)}
+var Dash = []vg.Length{vg.Points(1), vg.Points(1)}
+
 func pathRectangle(top vg.Length, right vg.Length, bottom vg.Length, left vg.Length) vg.Path {
 	p := vg.Path{}
 	p.Move(left, top)
