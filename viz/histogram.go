@@ -2,6 +2,7 @@ package viz
 
 import (
 	"code.google.com/p/plotinum/plotter"
+	. "github.com/onsi/analyzer/dsl"
 )
 
 func NewHistogram(data Data, n int, min float64, max float64) *plotter.Histogram {

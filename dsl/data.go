@@ -1,10 +1,31 @@
-package viz
+package dsl
 
 import (
 	"math"
 )
 
 type Data []float64
+
+func (ds Data) Stats() Stats {
+	return Stats{
+		Min:   ds.Min(),
+		Max:   ds.Max(),
+		Mean:  ds.Mean(),
+		Count: len(ds),
+	}
+}
+
+func (ds Data) Sum() float64 {
+	sum := 0.0
+	for _, d := range ds {
+		sum += d
+	}
+	return sum
+}
+
+func (ds Data) Mean() float64 {
+	return ds.Sum() / float64(len(ds))
+}
 
 func (ds Data) Min() float64 {
 	if len(ds) == 0 {
@@ -42,4 +63,14 @@ func (ds Data) CountInRange(low float64, high float64) int {
 		}
 	}
 	return count
+}
+
+func (ds Data) Filter(f Filter) Data {
+	out := Data{}
+	for _, d := range ds {
+		if f(d) {
+			out = append(out, d)
+		}
+	}
+	return out
 }
