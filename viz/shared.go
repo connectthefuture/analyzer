@@ -22,11 +22,15 @@ func init() {
 var Red = color.RGBA{255, 0, 0, 255}
 var Blue = color.RGBA{0, 0, 255, 255}
 
-func LineStyle(color color.RGBA, width float64) plot.LineStyle {
-	return plot.LineStyle{
+func LineStyle(color color.RGBA, width float64, dashes ...[]vg.Length) plot.LineStyle {
+	ls := plot.LineStyle{
 		Color: color,
 		Width: vg.Points(width),
 	}
+	if len(dashes) != 0 {
+		ls.Dashes = dashes[0]
+	}
+	return ls
 }
 
 var OrderedColors = []color.RGBA{
@@ -64,7 +68,7 @@ func OrderedColor(i int) color.RGBA {
 	return OrderedColors[i%len(OrderedColors)]
 }
 
-var Dot = []vg.Length{vg.Points(1), vg.Points(4)}
+var Dot = []vg.Length{vg.Points(1), vg.Points(2)}
 var Dash = []vg.Length{vg.Points(1), vg.Points(1)}
 
 func pathRectangle(top vg.Length, right vg.Length, bottom vg.Length, left vg.Length) vg.Path {
