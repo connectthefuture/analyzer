@@ -35,14 +35,16 @@ func analyzeGardenDT() {
 
 	delete(significantEvents, "garden-linux.container.info-starting")
 
-	markedEvents := map[string]plot.LineStyle{
-		"garden-linux.garden-server.create.creating":    viz.LineStyle(viz.Blue, 1, viz.Dot),
-		"garden-linux.garden-server.destroy.destroying": viz.LineStyle(viz.Red, 1, viz.Dot),
+	options := analyzers.SignificantEventsOptions{
+		MarkedEvents: map[string]plot.LineStyle{
+			"garden-linux.garden-server.create.creating":    viz.LineStyle(viz.Blue, 1, viz.Dot),
+			"garden-linux.garden-server.destroy.destroying": viz.LineStyle(viz.Red, 1, viz.Dot),
+		},
 	}
 
 	analyzers.VisualizeSignificantEvents(
 		significantEvents,
-		markedEvents,
 		config.DataDir("garden-dt", "many-garden-dt.svg"),
+		options,
 	)
 }

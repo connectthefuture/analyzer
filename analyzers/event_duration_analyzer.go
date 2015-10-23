@@ -86,12 +86,19 @@ func ExtractSignificantEvents(entries []chug.LogEntry) SignificantEvents {
 	return significantEvents
 }
 
-func VisualizeSignificantEvents(events SignificantEvents, markedEvents map[string]plot.LineStyle, filename string) {
+type SignificantEventsOptions struct {
+	MarkedEvents map[string]plot.LineStyle
+	MinX         float64
+	MaxX         float64
+}
+
+func VisualizeSignificantEvents(events SignificantEvents, filename string, options SignificantEventsOptions) {
 	firstTime := events.FirstTime()
 	tr := func(t time.Time) float64 {
 		return t.Sub(firstTime).Seconds()
 	}
 
+	minX := options.MinX
 	maxX := 0.0
 	maxY := 0.0
 	minY := math.MaxFloat64
@@ -126,12 +133,14 @@ func VisualizeSignificantEvents(events SignificantEvents, markedEvents map[strin
 			continue
 		}
 
-		ls, ok := markedEvents[name]
-		if ok {
-			for _, event := range events[name] {
-				l := viz.NewVerticalLine(tr(event.T))
-				l.LineStyle = ls
-				verticalLines = append(verticalLines, l)
+		if options.MarkedEvents != nil {
+			ls, ok := options.MarkedEvents[name]
+			if ok {
+				for _, event := range events[name] {
+					l := viz.NewVerticalLine(tr(event.T))
+					l.LineStyle = ls
+					verticalLines = append(verticalLines, l)
+				}
 			}
 		}
 
@@ -158,6 +167,10 @@ func VisualizeSignificantEvents(events SignificantEvents, markedEvents map[strin
 		h.LineStyle = viz.LineStyle(viz.OrderedColor(colorCounter), 1)
 		histograms[name] = h
 		colorCounter++
+	}
+
+	if options.MaxX != 0 {
+		maxX = options.MaxX
 	}
 
 	maxY = math.Pow(10, math.Ceil(math.Log10(maxY)))
@@ -200,7 +213,7 @@ func VisualizeSignificantEvents(events SignificantEvents, markedEvents map[strin
 		scatterPlot.Y.Label.Text = "Duration (s)"
 		scatterPlot.Y.Scale = plot.LogScale
 		scatterPlot.Y.Tick.Marker = plot.LogTicks
-		scatterPlot.X.Min = 0
+		scatterPlot.X.Min = minX
 		scatterPlot.X.Max = maxX
 		scatterPlot.Y.Min = 1e-5
 		scatterPlot.Y.Max = maxY
@@ -214,7 +227,7 @@ func VisualizeSignificantEvents(events SignificantEvents, markedEvents map[strin
 	}
 
 	allScatterPlot.Add(verticalLines...)
-	allScatterPlot.X.Min = 0
+	allScatterPlot.X.Min = minX
 	allScatterPlot.X.Max = maxX
 	allScatterPlot.Y.Min = 1e-5
 	allScatterPlot.Y.Max = maxY
