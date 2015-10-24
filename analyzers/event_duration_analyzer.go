@@ -213,12 +213,12 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 		scatterPlot.Y.Label.Text = "Duration (s)"
 		scatterPlot.Y.Scale = plot.LogScale
 		scatterPlot.Y.Tick.Marker = plot.LogTicks
+		scatterPlot.Add(scatter...)
+		scatterPlot.Add(verticalLines...)
 		scatterPlot.X.Min = minX
 		scatterPlot.X.Max = maxX
 		scatterPlot.Y.Min = 1e-5
 		scatterPlot.Y.Max = maxY
-		scatterPlot.Add(scatter...)
-		scatterPlot.Add(verticalLines...)
 
 		b.AddSubPlot(histogramPlot, viz.Rect{0, y, histWidth, height})
 		b.AddSubPlot(scatterPlot, viz.Rect{histWidth, y, scatterWidth, height})
@@ -231,6 +231,7 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 	allScatterPlot.X.Max = maxX
 	allScatterPlot.Y.Min = 1e-5
 	allScatterPlot.Y.Max = maxY
+	fmt.Println("all", minX, maxX)
 
 	b.AddSubPlot(allScatterPlot, viz.Rect{histWidth, 1 - height, scatterWidth, height})
 
