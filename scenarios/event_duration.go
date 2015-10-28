@@ -17,8 +17,8 @@ import (
 func GenerateEventDurationCommand() say.Command {
 	var minT, maxT float64
 	var skipList string
-	var blueEvent string
-	var redEvent string
+	var blueEvent, redEvent string
+	var outFile string
 
 	var fs = &flag.FlagSet{}
 	fs.Float64Var(&minT, "tmin", 0, "Min time")
@@ -26,6 +26,7 @@ func GenerateEventDurationCommand() say.Command {
 	fs.StringVar(&skipList, "skip", "", "Events to skip (comma delimited)")
 	fs.StringVar(&blueEvent, "blue", "", "Events to use to generate blue markers")
 	fs.StringVar(&redEvent, "red", "", "Events to use to generate red markers")
+	fs.StringVar(&outFile, "o", "", "Output file")
 
 	return say.Command{
 		Name:        "event-duration",
@@ -53,12 +54,16 @@ func GenerateEventDurationCommand() say.Command {
 
 			skips := strings.Split(skipList, ",")
 
-			analyzeEventDurations(args[0], options, skips)
+			if outFile == "" {
+				outFile = "out.svg"
+			}
+
+			analyzeEventDurations(args[0], options, skips, outFile)
 		},
 	}
 }
 
-func analyzeEventDurations(path string, options analyzers.SignificantEventsOptions, skips []string) {
+func analyzeEventDurations(path string, options analyzers.SignificantEventsOptions, skips []string, outFile string) {
 	data, err := ioutil.ReadFile(path)
 	say.ExitIfError("couldn't read log file", err)
 
@@ -74,7 +79,7 @@ func analyzeEventDurations(path string, options analyzers.SignificantEventsOptio
 
 	analyzers.VisualizeSignificantEvents(
 		significantEvents,
-		"out.svg",
+		outFile,
 		options,
 	)
 }
