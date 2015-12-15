@@ -19,8 +19,9 @@ func init() {
 	}
 }
 
-var Red = color.RGBA{255, 0, 0, 255}
-var Blue = color.RGBA{0, 0, 255, 255}
+var Red = color.RGBA{163, 36, 61, 255}
+var Blue = color.RGBA{34, 64, 95, 255}
+var Black = color.RGBA{0, 0, 0, 255}
 
 func LineStyle(color color.RGBA, width float64, dashes ...[]vg.Length) plot.LineStyle {
 	ls := plot.LineStyle{
@@ -34,7 +35,6 @@ func LineStyle(color color.RGBA, width float64, dashes ...[]vg.Length) plot.Line
 }
 
 var OrderedColors = []color.RGBA{
-	{0, 0, 0, 255},
 	{255, 0, 0, 255},
 	{0, 200, 0, 255},
 	{0, 0, 255, 255},

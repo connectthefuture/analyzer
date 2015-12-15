@@ -19,6 +19,7 @@ func GenerateEventDurationCommand() say.Command {
 	var skipList string
 	var blueEvent, redEvent string
 	var outFile string
+	var significantThreshold int
 
 	var fs = &flag.FlagSet{}
 	fs.Float64Var(&minT, "tmin", 0, "Min time")
@@ -26,6 +27,7 @@ func GenerateEventDurationCommand() say.Command {
 	fs.StringVar(&skipList, "skip", "", "Events to skip (comma delimited)")
 	fs.StringVar(&blueEvent, "blue", "", "Events to use to generate blue markers")
 	fs.StringVar(&redEvent, "red", "", "Events to use to generate red markers")
+	fs.IntVar(&significantThreshold, "n", 2, "Minimum number of events required to make it onto the plot")
 	fs.StringVar(&outFile, "o", "", "Output file")
 
 	return say.Command{
@@ -55,21 +57,21 @@ func GenerateEventDurationCommand() say.Command {
 			skips := strings.Split(skipList, ",")
 
 			if outFile == "" {
-				outFile = "out.svg"
+				outFile = "out.png"
 			}
 
-			analyzeEventDurations(args[0], options, skips, outFile)
+			analyzeEventDurations(args[0], options, significantThreshold, skips, outFile)
 		},
 	}
 }
 
-func analyzeEventDurations(path string, options analyzers.SignificantEventsOptions, skips []string, outFile string) {
+func analyzeEventDurations(path string, options analyzers.SignificantEventsOptions, n int, skips []string, outFile string) {
 	data, err := ioutil.ReadFile(path)
 	say.ExitIfError("couldn't read log file", err)
 
 	entries := util.ChugLagerEntries(data)
 
-	significantEvents := analyzers.ExtractSignificantEvents(entries)
+	significantEvents := analyzers.ExtractSignificantEventsWithThreshold(entries, n)
 	significantEvents.LogWithThreshold(0.2)
 
 	for _, skip := range skips {

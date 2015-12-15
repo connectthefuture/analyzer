@@ -51,6 +51,10 @@ func (s SignificantEvents) LogWithThreshold(threshold float64) {
 }
 
 func ExtractSignificantEvents(entries []chug.LogEntry) SignificantEvents {
+	return ExtractSignificantEventsWithThreshold(entries, 1)
+}
+
+func ExtractSignificantEventsWithThreshold(entries []chug.LogEntry, n int) SignificantEvents {
 	say.Println(0, "Log Lines: %d", len(entries))
 	say.Println(0, "Spanning: %s", entries[len(entries)-1].Timestamp.Sub(entries[0].Timestamp))
 
@@ -75,7 +79,7 @@ func ExtractSignificantEvents(entries []chug.LogEntry) SignificantEvents {
 	significantEvents := SignificantEvents{}
 	messages := []string{}
 	for message, events := range groupedEvents {
-		if len(events) > 1 {
+		if len(events) > n {
 			significantEvents[message] = events
 			messages = append(messages, message)
 		}
@@ -86,10 +90,27 @@ func ExtractSignificantEvents(entries []chug.LogEntry) SignificantEvents {
 	return significantEvents
 }
 
+type LineOverlay struct {
+	Events    Events
+	LineStyle plot.LineStyle
+}
+
+type VerticalMarker struct {
+	T         time.Time
+	LineStyle plot.LineStyle
+}
+
 type SignificantEventsOptions struct {
-	MarkedEvents map[string]plot.LineStyle
-	MinX         float64
-	MaxX         float64
+	MarkedEvents    map[string]plot.LineStyle
+	VerticalMarkers []VerticalMarker
+	LineOverlays    []LineOverlay
+	OverlayPlots    []plot.Plotter
+	MinX            float64
+	MaxX            float64
+	MinT            time.Time
+	MaxT            time.Time
+	MaxY            float64
+	WidthStretch    float64
 }
 
 func VisualizeSignificantEvents(events SignificantEvents, filename string, options SignificantEventsOptions) {
@@ -98,14 +119,20 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 		return t.Sub(firstTime).Seconds()
 	}
 
-	minX := options.MinX
+	minX := 0.0
+	if options.MinX != 0 {
+		minX = options.MinX
+	}
+	if !options.MinT.IsZero() {
+		minX = tr(options.MinT)
+	}
 	maxX := 0.0
 	maxY := 0.0
 	minY := math.MaxFloat64
 
-	histograms := map[string]plot.Plotter{}
 	scatters := map[string][]plot.Plotter{}
 	verticalLines := []plot.Plotter{}
+	lineOverlays := []plot.Plotter{}
 
 	colorCounter := 0
 	for _, name := range events.OrderedNames() {
@@ -162,27 +189,52 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 
 		scatters[name] = []plot.Plotter{s, xErrsPlot}
 
-		durations := events[name].Data()
-		h := viz.NewHistogram(durations, 20, durations.Min(), durations.Max())
-		h.LineStyle = viz.LineStyle(viz.OrderedColor(colorCounter), 1)
-		histograms[name] = h
 		colorCounter++
+	}
+
+	for _, marker := range options.VerticalMarkers {
+		l := viz.NewVerticalLine(tr(marker.T))
+		l.LineStyle = marker.LineStyle
+		verticalLines = append(verticalLines, l)
+	}
+
+	for _, lineOverlay := range options.LineOverlays {
+		xys := plotter.XYs{}
+		for _, event := range lineOverlay.Events {
+			if event.V > 0 {
+				xys = append(xys, struct{ X, Y float64 }{tr(event.T), event.V})
+			}
+		}
+
+		l, s, err := plotter.NewLinePoints(xys)
+		say.ExitIfError("Couldn't create scatter plot", err)
+
+		l.LineStyle = lineOverlay.LineStyle
+		s.GlyphStyle = plot.GlyphStyle{
+			Color:  lineOverlay.LineStyle.Color,
+			Radius: lineOverlay.LineStyle.Width,
+			Shape:  plot.CrossGlyph{},
+		}
+		lineOverlays = append(lineOverlays, l, s)
 	}
 
 	if options.MaxX != 0 {
 		maxX = options.MaxX
 	}
+	if !options.MaxT.IsZero() {
+		maxX = tr(options.MaxT)
+	}
 
 	maxY = math.Pow(10, math.Ceil(math.Log10(maxY)))
+
+	if options.MaxY != 0 {
+		maxY = options.MaxY
+	}
+
 	minY = math.Pow(10, math.Floor(math.Log10(minY)))
 
-	b := &viz.Board{}
-	n := len(histograms) + 1
-	padding := 0.1 / float64(n-1)
-	height := (1.0 - padding*float64(n-1)) / float64(n)
-	histWidth := 0.3
-	scatterWidth := 0.7
-	y := 1 - height - padding - height
+	n := len(scatters) + 1
+	b := viz.NewUniformBoard(1, n, 0.01)
 
 	allScatterPlot, _ := plot.New()
 	allScatterPlot.Title.Text = "All Events"
@@ -191,21 +243,14 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 	allScatterPlot.Y.Scale = plot.LogScale
 	allScatterPlot.Y.Tick.Marker = plot.LogTicks
 
-	for _, name := range events.OrderedNames() {
-		histogram, ok := histograms[name]
+	for i, name := range events.OrderedNames() {
+		scatter, ok := scatters[name]
 		if !ok {
 			continue
 		}
-		scatter := scatters[name]
 
 		allScatterPlot.Add(scatter[0])
 		allScatterPlot.Add(scatter[1])
-
-		histogramPlot, _ := plot.New()
-		histogramPlot.Title.Text = name
-		histogramPlot.X.Label.Text = "Duration (s)"
-		histogramPlot.Y.Label.Text = "N"
-		histogramPlot.Add(histogram)
 
 		scatterPlot, _ := plot.New()
 		scatterPlot.Title.Text = name
@@ -215,25 +260,30 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 		scatterPlot.Y.Tick.Marker = plot.LogTicks
 		scatterPlot.Add(scatter...)
 		scatterPlot.Add(verticalLines...)
+		scatterPlot.Add(lineOverlays...)
+		scatterPlot.Add(options.OverlayPlots...)
 		scatterPlot.X.Min = minX
 		scatterPlot.X.Max = maxX
 		scatterPlot.Y.Min = 1e-5
 		scatterPlot.Y.Max = maxY
 
-		b.AddSubPlot(histogramPlot, viz.Rect{0, y, histWidth, height})
-		b.AddSubPlot(scatterPlot, viz.Rect{histWidth, y, scatterWidth, height})
-
-		y -= height + padding
+		b.AddSubPlotAt(scatterPlot, 0, n-2-i)
 	}
 
 	allScatterPlot.Add(verticalLines...)
+	allScatterPlot.Add(lineOverlays...)
+	allScatterPlot.Add(options.OverlayPlots...)
 	allScatterPlot.X.Min = minX
 	allScatterPlot.X.Max = maxX
 	allScatterPlot.Y.Min = 1e-5
 	allScatterPlot.Y.Max = maxY
 	fmt.Println("all", minX, maxX)
 
-	b.AddSubPlot(allScatterPlot, viz.Rect{histWidth, 1 - height, scatterWidth, height})
+	b.AddSubPlotAt(allScatterPlot, 0, n-1)
 
-	b.Save(16.0, 5*float64(n), filename)
+	width := 12.0
+	if options.WidthStretch > 0 {
+		width = width * options.WidthStretch
+	}
+	b.Save(width, 5*float64(n), filename)
 }

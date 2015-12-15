@@ -15,6 +15,11 @@ func GenerateCommandGroups() []say.CommandGroup {
 			Name:        "diego",
 			Description: "Diego analysis commands",
 			Commands: []say.Command{
+				GeneratePWSSlowEvacuationCommand(),
+				GenerateGardenAUFSStressTestsCommand(),
+				GenerateCPUWeightStressTestCommand(),
+				GenerateGardenStressTestsCommand(),
+				GenerateSlowPWSTasksCommand(),
 				GenerateGardenDTCommand(),
 				GenerateAuctioneerFetchStateDurationCommand(),
 			},
