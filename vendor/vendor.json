@@ -1,0 +1,117 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "t99BwSqDR/BYWkcfLnoAnAuqOPQ=",
+			"path": "bitbucket.org/zombiezen/gopdf/pdf",
+			"revision": "fbd23f88daf8",
+			"revisionTime": "2015-01-31T16:16:37Z"
+		},
+		{
+			"checksumSHA1": "5NPFO7YcOCOyMAKFiI2NgZeIAv8=",
+			"path": "code.google.com/p/draw2d/draw2d",
+			"revision": "eaeb833648ee",
+			"revisionTime": "2015-01-07T14:35:09Z"
+		},
+		{
+			"checksumSHA1": "PFmcTGK8hf+W/s9qosjlsSGXShM=",
+			"path": "code.google.com/p/freetype-go/freetype",
+			"revision": "4ee4916a76ae",
+			"revisionTime": "2014-11-06T22:38:15Z"
+		},
+		{
+			"checksumSHA1": "L5tMXzfBJE7lQURsfhQ9mALaACc=",
+			"path": "code.google.com/p/freetype-go/freetype/raster",
+			"revision": "4ee4916a76ae",
+			"revisionTime": "2014-11-06T22:38:15Z"
+		},
+		{
+			"checksumSHA1": "vr46deWfLrU6NY4G+CFo70S6uzU=",
+			"path": "code.google.com/p/freetype-go/freetype/truetype",
+			"revision": "4ee4916a76ae",
+			"revisionTime": "2014-11-06T22:38:15Z"
+		},
+		{
+			"checksumSHA1": "VonAY8lA1sB/77QJZWd8r66Y5UE=",
+			"path": "code.google.com/p/plotinum/plot",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "bAEoY9UxVUj8ZxJrMRhfpz3PwXk=",
+			"path": "code.google.com/p/plotinum/plotter",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "3nxZ6L5Rj+5KNU5+7olqpA2m8L0=",
+			"path": "code.google.com/p/plotinum/vg",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "uk6aSzxWlQw90W6px+SHTJICYHU=",
+			"path": "code.google.com/p/plotinum/vg/vgeps",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "dWxWIm00RzwVV/8CI8u52tGz4TU=",
+			"path": "code.google.com/p/plotinum/vg/vgimg",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "V4uNfkd28tutjgFOMWU2O0NYn98=",
+			"path": "code.google.com/p/plotinum/vg/vgpdf",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "1NgDYfH95rCyiuON8W4OBWAZCdc=",
+			"path": "code.google.com/p/plotinum/vg/vgsvg",
+			"revision": "6632c5f3e77e",
+			"revisionTime": "2015-01-13T06:15:05Z"
+		},
+		{
+			"checksumSHA1": "QDrUCXUuQ10S8o6FpD6vLaAjfSE=",
+			"path": "github.com/ajstarks/svgo",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "VrTakWOJeOH8XD3UXGlv46brx10=",
+			"path": "github.com/onsi/gomega/format",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "WBef6Wu8Vt08ZDKK1Qn9zOXl8Ac=",
+			"path": "github.com/onsi/say",
+			"revision": "cbcfecc5cfefddcc5dc18051798e909ae0f88c70",
+			"revisionTime": "2015-05-24T21:53:39Z"
+		},
+		{
+			"checksumSHA1": "AXpIa3pzz9xxtQdCjZjmGBLkoeU=",
+			"path": "github.com/pivotal-golang/lager",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "WgYfNLl9utlruRS/WaqQ6FBQFOI=",
+			"path": "github.com/pivotal-golang/lager/chug",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "ha+ZcUdm5u8nrFFpMqEvLB6YiHQ=",
+			"path": "golang.org/x/image/tiff",
+			"revision": "7f6859d3853a76e5c6de50cac970173a9b803517",
+			"revisionTime": "2014-12-23T06:59:12Z"
+		},
+		{
+			"checksumSHA1": "Xj9IitD94/tprp7V1YNjlEIVa+A=",
+			"path": "golang.org/x/image/tiff/lzw",
+			"revision": "7f6859d3853a76e5c6de50cac970173a9b803517",
+			"revisionTime": "2014-12-23T06:59:12Z"
+		}
+	],
+	"rootPath": "github.com/onsi/analyzer"
+}
