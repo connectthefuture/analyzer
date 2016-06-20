@@ -69,7 +69,7 @@ func OrderedColor(i int) color.RGBA {
 }
 
 var Dot = []vg.Length{vg.Points(1), vg.Points(2)}
-var Dash = []vg.Length{vg.Points(1), vg.Points(1)}
+var Dash = []vg.Length{vg.Points(4), vg.Points(4)}
 
 func pathRectangle(top vg.Length, right vg.Length, bottom vg.Length, left vg.Length) vg.Path {
 	p := vg.Path{}

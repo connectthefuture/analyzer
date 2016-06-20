@@ -22,6 +22,7 @@ func GenerateCommandGroups() []say.CommandGroup {
 				GenerateSlowPWSTasksCommand(),
 				GenerateGardenDTCommand(),
 				GenerateAuctioneerFetchStateDurationCommand(),
+				GenerateHealthCheckTimeoutsCommand(),
 			},
 		},
 	}
