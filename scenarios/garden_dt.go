@@ -4,7 +4,7 @@ import (
 	"flag"
 	"io/ioutil"
 
-	"code.google.com/p/plotinum/plot"
+	"github.com/gonum/plot/vg/draw"
 
 	"github.com/onsi/analyzer/analyzers"
 	"github.com/onsi/analyzer/config"
@@ -36,7 +36,7 @@ func analyzeGardenDT() {
 	delete(significantEvents, "garden-linux.container.info-starting")
 
 	options := analyzers.SignificantEventsOptions{
-		MarkedEvents: map[string]plot.LineStyle{
+		MarkedEvents: map[string]draw.LineStyle{
 			"garden-linux.garden-server.create.creating":    viz.LineStyle(viz.Blue, 1, viz.Dot),
 			"garden-linux.garden-server.destroy.destroying": viz.LineStyle(viz.Red, 1, viz.Dot),
 		},

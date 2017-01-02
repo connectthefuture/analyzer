@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"image/color"
 
-	"code.google.com/p/plotinum/plot"
-	"code.google.com/p/plotinum/vg"
+	"github.com/gonum/plot"
+	"github.com/gonum/plot/vg"
+	"github.com/gonum/plot/vg/draw"
 )
 
 var defaultFont vg.Font
@@ -23,8 +24,8 @@ var Red = color.RGBA{163, 36, 61, 255}
 var Blue = color.RGBA{34, 64, 95, 255}
 var Black = color.RGBA{0, 0, 0, 255}
 
-func LineStyle(color color.RGBA, width float64, dashes ...[]vg.Length) plot.LineStyle {
-	ls := plot.LineStyle{
+func LineStyle(color color.RGBA, width float64, dashes ...[]vg.Length) draw.LineStyle {
+	ls := draw.LineStyle{
 		Color: color,
 		Width: vg.Points(width),
 	}
@@ -73,10 +74,10 @@ var Dash = []vg.Length{vg.Points(4), vg.Points(4)}
 
 func pathRectangle(top vg.Length, right vg.Length, bottom vg.Length, left vg.Length) vg.Path {
 	p := vg.Path{}
-	p.Move(left, top)
-	p.Line(right, top)
-	p.Line(right, bottom)
-	p.Line(left, bottom)
+	p.Move(vg.Point{left, top})
+	p.Line(vg.Point{right, top})
+	p.Line(vg.Point{right, bottom})
+	p.Line(vg.Point{left, bottom})
 	p.Close()
 	return p
 }

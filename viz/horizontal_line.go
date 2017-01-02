@@ -1,13 +1,15 @@
 package viz
 
 import (
-	"code.google.com/p/plotinum/plot"
-	"code.google.com/p/plotinum/plotter"
+	"github.com/gonum/plot"
+	"github.com/gonum/plot/plotter"
+	"github.com/gonum/plot/vg"
+	"github.com/gonum/plot/vg/draw"
 )
 
 type HorizontalLine struct {
 	Y float64
-	plot.LineStyle
+	draw.LineStyle
 }
 
 func NewHorizontalLine(y float64) *HorizontalLine {
@@ -17,12 +19,12 @@ func NewHorizontalLine(y float64) *HorizontalLine {
 	}
 }
 
-func (pts *HorizontalLine) Plot(da plot.DrawArea, plt *plot.Plot) {
+func (pts *HorizontalLine) Plot(da draw.Canvas, plt *plot.Plot) {
 	_, trY := plt.Transforms(&da)
-	ps := make([]plot.Point, 2)
+	ps := make([]vg.Point, 2)
 
 	ps[0].X = da.Min.X
-	ps[1].X = da.Max().X
+	ps[1].X = da.Max.X
 
 	ps[0].Y = trY(pts.Y)
 	ps[1].Y = ps[0].Y

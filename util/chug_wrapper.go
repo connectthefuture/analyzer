@@ -3,7 +3,7 @@ package util
 import (
 	"bytes"
 
-	"github.com/pivotal-golang/lager/chug"
+	"code.cloudfoundry.org/lager/chug"
 )
 
 func ChugLagerEntries(raw []byte) []chug.LogEntry {

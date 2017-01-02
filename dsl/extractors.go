@@ -3,7 +3,7 @@ package dsl
 import (
 	"time"
 
-	"github.com/pivotal-golang/lager/chug"
+	"code.cloudfoundry.org/lager/chug"
 )
 
 func DurationExtractor(field string) func(chug.LogEntry) float64 {

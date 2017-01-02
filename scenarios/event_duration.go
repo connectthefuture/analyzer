@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"code.google.com/p/plotinum/plot"
+	"github.com/gonum/plot/vg/draw"
 
 	"github.com/onsi/analyzer/analyzers"
 	"github.com/onsi/analyzer/util"
@@ -40,7 +40,7 @@ func GenerateEventDurationCommand() say.Command {
 				os.Exit(1)
 			}
 
-			markedEvents := map[string]plot.LineStyle{}
+			markedEvents := map[string]draw.LineStyle{}
 			if blueEvent != "" {
 				markedEvents[blueEvent] = viz.LineStyle(viz.Blue, 1, viz.Dot)
 			}

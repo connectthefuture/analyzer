@@ -8,9 +8,9 @@ import (
 	"sort"
 	"strconv"
 
-	"code.google.com/p/plotinum/plotter"
+	"github.com/gonum/plot/plotter"
 
-	"code.google.com/p/plotinum/plot"
+	"github.com/gonum/plot"
 
 	"github.com/onsi/analyzer/viz"
 
@@ -71,8 +71,8 @@ func analyzeRouterGoPerf() {
 	p, _ := plot.New()
 	p.X.Label.Text = "Time (s)"
 	p.Y.Label.Text = "N"
-	p.X.Scale = plot.LogScale
-	p.X.Tick.Marker = plot.LogTicks
+	p.X.Scale = plot.LogScale{}
+	p.X.Tick.Marker = plot.LogTicks{}
 	p.X.Min = 0.007
 	p.X.Max = 0.4
 
@@ -93,13 +93,13 @@ func analyzeRouterGoPerf() {
 	p.X.Label.Text = "100 - percentile"
 	p.Y.Label.Text = "Time (s)"
 
-	p.X.Scale = plot.LogScale
-	p.X.Tick.Marker = plot.LogTicks
+	p.X.Scale = plot.LogScale{}
+	p.X.Tick.Marker = plot.LogTicks{}
 	p.X.Min = 0.001
 	p.X.Max = 100.0
 
-	p.Y.Scale = plot.LogScale
-	p.Y.Tick.Marker = plot.LogTicks
+	p.Y.Scale = plot.LogScale{}
+	p.Y.Tick.Marker = plot.LogTicks{}
 	p.Y.Min = 0.0007
 	p.Y.Max = 0.4
 

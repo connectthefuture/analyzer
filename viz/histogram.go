@@ -3,7 +3,7 @@ package viz
 import (
 	"math"
 
-	"code.google.com/p/plotinum/plotter"
+	"github.com/gonum/plot/plotter"
 	. "github.com/onsi/analyzer/dsl"
 )
 

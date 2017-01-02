@@ -5,13 +5,13 @@ import (
 	"io/ioutil"
 	"reflect"
 
-	"code.google.com/p/plotinum/plot"
+	"github.com/gonum/plot"
 
 	. "github.com/onsi/analyzer/dsl"
 
+	"code.cloudfoundry.org/lager/chug"
 	"github.com/onsi/analyzer/config"
 	"github.com/onsi/analyzer/viz"
-	"github.com/pivotal-golang/lager/chug"
 
 	"github.com/onsi/analyzer/analyzers"
 	"github.com/onsi/analyzer/util"

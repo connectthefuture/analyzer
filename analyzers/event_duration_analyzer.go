@@ -8,12 +8,13 @@ import (
 
 	. "github.com/onsi/analyzer/dsl"
 
-	"code.google.com/p/plotinum/plot"
-	"code.google.com/p/plotinum/plotter"
+	"github.com/gonum/plot"
+	"github.com/gonum/plot/plotter"
+	"github.com/gonum/plot/vg/draw"
 
+	"code.cloudfoundry.org/lager/chug"
 	"github.com/onsi/analyzer/viz"
 	"github.com/onsi/say"
-	"github.com/pivotal-golang/lager/chug"
 )
 
 type SignificantEvents map[string]Events
@@ -92,16 +93,16 @@ func ExtractSignificantEventsWithThreshold(entries []chug.LogEntry, n int) Signi
 
 type LineOverlay struct {
 	Events    Events
-	LineStyle plot.LineStyle
+	LineStyle draw.LineStyle
 }
 
 type VerticalMarker struct {
 	T         time.Time
-	LineStyle plot.LineStyle
+	LineStyle draw.LineStyle
 }
 
 type SignificantEventsOptions struct {
-	MarkedEvents    map[string]plot.LineStyle
+	MarkedEvents    map[string]draw.LineStyle
 	VerticalMarkers []VerticalMarker
 	LineOverlays    []LineOverlay
 	OverlayPlots    []plot.Plotter
@@ -174,10 +175,10 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 		s, err := plotter.NewScatter(xys)
 		say.ExitIfError("Couldn't create scatter plot", err)
 
-		s.GlyphStyle = plot.GlyphStyle{
+		s.GlyphStyle = draw.GlyphStyle{
 			Color:  viz.OrderedColor(colorCounter),
 			Radius: 2,
-			Shape:  plot.CircleGlyph{},
+			Shape:  draw.CircleGlyph{},
 		}
 
 		xErrsPlot, err := plotter.NewXErrorBars(struct {
@@ -210,10 +211,10 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 		say.ExitIfError("Couldn't create scatter plot", err)
 
 		l.LineStyle = lineOverlay.LineStyle
-		s.GlyphStyle = plot.GlyphStyle{
+		s.GlyphStyle = draw.GlyphStyle{
 			Color:  lineOverlay.LineStyle.Color,
 			Radius: lineOverlay.LineStyle.Width,
-			Shape:  plot.CrossGlyph{},
+			Shape:  draw.CrossGlyph{},
 		}
 		lineOverlays = append(lineOverlays, l, s)
 	}
@@ -240,8 +241,8 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 	allScatterPlot.Title.Text = "All Events"
 	allScatterPlot.X.Label.Text = "Time (s)"
 	allScatterPlot.Y.Label.Text = "Duration (s)"
-	allScatterPlot.Y.Scale = plot.LogScale
-	allScatterPlot.Y.Tick.Marker = plot.LogTicks
+	allScatterPlot.Y.Scale = plot.LogScale{}
+	allScatterPlot.Y.Tick.Marker = plot.LogTicks{}
 
 	for i, name := range events.OrderedNames() {
 		scatter, ok := scatters[name]
@@ -256,8 +257,8 @@ func VisualizeSignificantEvents(events SignificantEvents, filename string, optio
 		scatterPlot.Title.Text = name
 		scatterPlot.X.Label.Text = "Time (s)"
 		scatterPlot.Y.Label.Text = "Duration (s)"
-		scatterPlot.Y.Scale = plot.LogScale
-		scatterPlot.Y.Tick.Marker = plot.LogTicks
+		scatterPlot.Y.Scale = plot.LogScale{}
+		scatterPlot.Y.Tick.Marker = plot.LogTicks{}
 		scatterPlot.Add(scatter...)
 		scatterPlot.Add(verticalLines...)
 		scatterPlot.Add(lineOverlays...)

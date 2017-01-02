@@ -10,9 +10,9 @@ import (
 	. "github.com/onsi/analyzer/dsl"
 	"github.com/onsi/gomega/format"
 
+	"code.cloudfoundry.org/lager/chug"
 	"github.com/onsi/analyzer/config"
 	"github.com/onsi/analyzer/viz"
-	"github.com/pivotal-golang/lager/chug"
 
 	"github.com/onsi/analyzer/analyzers"
 	"github.com/onsi/analyzer/util"

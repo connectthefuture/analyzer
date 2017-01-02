@@ -4,7 +4,7 @@ import (
 	"flag"
 	"io/ioutil"
 
-	"code.google.com/p/plotinum/plot"
+	"github.com/gonum/plot"
 
 	"github.com/onsi/analyzer/config"
 	. "github.com/onsi/analyzer/dsl"
