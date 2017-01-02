@@ -25,5 +25,12 @@ func GenerateCommandGroups() []say.CommandGroup {
 				GenerateHealthCheckTimeoutsCommand(),
 			},
 		},
+		{
+			Name:        "routing",
+			Description: "Routing analysis commands",
+			Commands: []say.Command{
+				GenerateRouterGoPerfCommand(),
+			},
+		},
 	}
 }
